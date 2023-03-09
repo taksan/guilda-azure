@@ -20,8 +20,8 @@ resource "azurerm_linux_virtual_machine" "vm" {
     version   = "latest"  
   }
 
-  computer_name                   = "takeuchi"
-  admin_username                  = "ubuntu"
+  computer_name                   = "my-vm"
+  admin_username                  = "ubuntu" 
   disable_password_authentication = true
 
   admin_ssh_key {
