@@ -26,7 +26,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
 
   admin_ssh_key {
     username   = "ubuntu"
-    public_key = var.public_ssh_key
+    public_key = tls_private_key.admin_ssh.public_key_openssh
   }
 
 }
