@@ -29,6 +29,9 @@ resource "azurerm_linux_virtual_machine" "vm" {
     public_key = tls_private_key.admin_ssh.public_key_openssh
   }
 
+  identity {
+    type = "SystemAssigned"
+  }
 }
 
 resource "azurerm_network_interface" "vm_nic" {
@@ -50,4 +53,20 @@ resource "azurerm_public_ip" "vm_public_ip" {
 
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = azurerm_resource_group.rg.location
+}
+
+resource "azurerm_key_vault_access_policy" "catalog_vm_ap" {
+  key_vault_id = azurerm_key_vault.kv.id
+  tenant_id = azurerm_linux_virtual_machine.vm.identity[0].tenant_id
+  object_id = azurerm_linux_virtual_machine.vm.identity[0].principal_id
+
+  secret_permissions = [
+    "Get",
+    "List",
+    "Set",
+    "Delete"
+  ]
+  depends_on = [
+    azurerm_linux_virtual_machine.vm
+  ]
 }

@@ -1,11 +1,3 @@
-provider "azurerm" {
-  features {}
-}
-
-resource "azurerm_resource_group" "rg" {
-  location = "eastus"
-  name     = "sometake"
-}
 
 resource "azurerm_storage_account" "sa" {
   name                     = "satakeuchi123"
