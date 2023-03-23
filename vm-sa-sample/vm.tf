@@ -70,3 +70,38 @@ resource "azurerm_key_vault_access_policy" "catalog_vm_ap" {
     azurerm_linux_virtual_machine.vm
   ]
 }
+
+resource "azurerm_network_security_group" "vm_nsg" {
+  name                = "nsg"
+resource_group_name      = azurerm_resource_group.rg.name
+  location                 = azurerm_resource_group.rg.location
+
+  security_rule {
+      name                       = "SSH"
+      priority                   = 300
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "22"
+      source_address_prefix      = module.myip.ip
+      destination_address_prefix = "*"
+  }
+
+  security_rule {
+      name                       = "http"
+      priority                   = 301
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_port_range          = "*"
+      destination_port_range     = "80"
+      source_address_prefix      = module.myip.ip
+      destination_address_prefix = "*"
+  }
+}
+
+resource "azurerm_network_interface_security_group_association" "vm_nic_nsg" {
+  network_interface_id      = azurerm_network_interface.vm_nic.id
+  network_security_group_id = azurerm_network_security_group.vm_nsg.id
+}
