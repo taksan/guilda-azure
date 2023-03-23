@@ -1,0 +1,4 @@
+resourcegroup                 = "flash"
+function_name                 = "aztakfun"
+function_storage_account_name = "aztakfunsa"
+runtime                       = "node"
